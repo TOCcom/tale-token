@@ -37,22 +37,26 @@ contract TaleToken is ERC20Vesting {
     InstantBeneficiary public privateSaleBeneficiary;
     InstantBeneficiary public ecosystemBeneficiary;
     InstantBeneficiary public exchangeFeeBeneficiary;
+    InstantBeneficiary public marketingBeneficiary;
 
     constructor(address publicSaleAddress, uint256 publicSaleAmount,
         address privateSaleAdddress, uint256 privateSaleAmount,
         address ecosystemAddress, uint256 ecosystemAmount,
-        address exchangeFeeAddress, uint256 exchangeFeeAmount) ERC20("Tales of Chain", "TALE") {
+        address exchangeFeeAddress, uint256 exchangeFeeAmount,
+        address marketingAddress, uint256 marketingAmount) ERC20("Tales of Chain", "TALE") {
             _mint(address(this), 2000000000 * 10 ** decimals());
 
             _transfer(address(this), publicSaleAddress, publicSaleAmount);
             _transfer(address(this), privateSaleAdddress, privateSaleAmount);
             _transfer(address(this), ecosystemAddress, ecosystemAmount);
             _transfer(address(this), exchangeFeeAddress, exchangeFeeAmount);
+            _transfer(address(this), marketingAddress, marketingAmount);
             
             publicSaleBeneficiary = InstantBeneficiary(publicSaleAddress, publicSaleAmount);
             privateSaleBeneficiary = InstantBeneficiary(privateSaleAdddress, privateSaleAmount);
             ecosystemBeneficiary = InstantBeneficiary(ecosystemAddress, ecosystemAmount);
             exchangeFeeBeneficiary = InstantBeneficiary(exchangeFeeAddress, exchangeFeeAmount);
+            marketingBeneficiary = InstantBeneficiary(marketingAddress, marketingAmount);
     }
 
     /**
@@ -186,7 +190,7 @@ contract TaleToken is ERC20Vesting {
     * @return the address of benefeciary
     */
     function getPrivateSaleVestingAddress(uint256 index) external view returns(address) {
-        require(index < privateSaleVestingAddresses.length);
+        require(index < privateSaleVestingAddresses.length, "Invalid address index");
         return privateSaleVestingAddresses[index];
     }
 
@@ -196,7 +200,7 @@ contract TaleToken is ERC20Vesting {
     * @return the address of benefeciary
     */
     function getTeamAndAdvisorVestingAddress(uint256 index) external view returns(address) {
-        require(index < teamAndAdvisorVestingAddresses.length);
+        require(index < teamAndAdvisorVestingAddresses.length, "Invalid address index");
         return teamAndAdvisorVestingAddresses[index];
     }
 
@@ -206,7 +210,7 @@ contract TaleToken is ERC20Vesting {
     * @return the address of benefeciary
     */
     function getEcosystemVestingAddress(uint256 index) external view returns(address) {
-        require(index < ecosystemVestingAddresses.length);
+        require(index < ecosystemVestingAddresses.length, "Invalid address index");
         return ecosystemVestingAddresses[index];
     }
 
@@ -216,7 +220,7 @@ contract TaleToken is ERC20Vesting {
     * @return the address of benefeciary
     */
     function getMarketingVestingAddress(uint256 index) external view returns(address) {
-        require(index < marketingVestingAddresses.length);
+        require(index < marketingVestingAddresses.length, "Invalid address index");
         return marketingVestingAddresses[index];
     }
 
@@ -226,7 +230,7 @@ contract TaleToken is ERC20Vesting {
     * @return the address of benefeciary
     */
     function getExchangeFeeVestingAddress(uint256 index) external view returns(address) {
-        require(index < exchangeFeeVestingAddresses.length);
+        require(index < exchangeFeeVestingAddresses.length, "Invalid address index");
         return exchangeFeeVestingAddresses[index];
     }
 }
