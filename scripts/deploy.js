@@ -63,7 +63,6 @@ async function addVesting(functionName, benefeciaries) {
 }
 
 deploy()
-.then(() => console.log(privateSaleVestingBeneficiaries.length))
   .then(() => addVesting("addPrivateSaleVestingAddress", privateSaleVestingBeneficiaries))
   .then(() => addVesting("addTeamAndAdvisorVestingAddress", teamAndAdvisorVestingBeneficiaries))
   .then(() => addVesting("addEcosystemVestingAddress", ecosystemVestingBeneficiaries))

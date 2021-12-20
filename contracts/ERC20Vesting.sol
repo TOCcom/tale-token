@@ -91,7 +91,8 @@ abstract contract ERC20Vesting is Ownable, ERC20Burnable {
         );
         require(duration > 0, "TokenVesting: duration must be > 0");
         require(amount > 0, "TokenVesting: amount must be > 0");
-        require(period >= 1, "TokenVesting: slicePeriodSeconds must be >= 1");
+        require(period >= 1, "TokenVesting: slicePeriodSeconds must be >= 1"); 
+        require(vestingSchedulesTotalAmount.add(amount) <= totalSupply(), "TokenVesting: not enough free tokens");
         VestingSchedule storage vestingSchedule = vestingSchedules[beneficiary];
         require(!vestingSchedule.initialized, "TokenVesting: the address is already have vesting shedule");
         vestingSchedules[beneficiary] = VestingSchedule(
