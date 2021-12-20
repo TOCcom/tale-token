@@ -57,6 +57,7 @@ abstract contract ERC20Vesting is Ownable, ERC20Burnable {
         vestingSchedule.released = vestingSchedule.released.add(vestedAmount);
         vestingSchedulesTotalAmount = vestingSchedulesTotalAmount.sub(vestedAmount);
         _transfer(address(this), beneficiary, vestedAmount);
+        emit Released(vestedAmount);
     }
 
     /**
