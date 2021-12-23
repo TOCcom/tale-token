@@ -90,7 +90,7 @@ contract TaleToken is ERC20Vesting {
             teamAndAdvisorVestingDuration, 
             vestingPeriod,
             amount);
-        privateSaleVestingAddresses.push(beneficiary);
+        teamAndAdvisorVestingAddresses.push(beneficiary);
     }
 
     /**
