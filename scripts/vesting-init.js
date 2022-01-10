@@ -1,13 +1,7 @@
 /**
- * START CONFIG SECTION
+ * START CONFIGURATION SECTION
  */
-const instantBeneficiaries = [
-    '0x5B38Da6a701c568545dCfcB03FcB875f56beddC4', '70000000000000000000000000',     // public sale
-    '0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2', '30000000000000000000000000',     // private sale
-    '0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db', '17850000000000000000000000',     // ecosystem
-    '0x617F2E2fD72FD9D5503197092aC168c91465E7f2', '5000000000000000000000000',      // exchange fee
-    '0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB', '4800000000000000000000000'       // marketing
-];
+const contractAddress = '0x9755ac467bee2e7558b89988df3de4ca4f16b123';
 const privateSaleVestingBeneficiaries = [
     { address: '0x14A2E1244eaEcf75d8B5cB5bc6Df19AF9D00beF9', amount: '30000000000000000000000000' },
     { address: '0xe1dE574564484350fcf65cAbdC2166FE281a8833', amount: '30000000000000000000000000' }
@@ -29,26 +23,8 @@ const exhangeFeeVestingBeneficiaries = [
     { address: '0x5FcE589922179eE6655DFd1279f04B83733ead15', amount: '30000000000000000000000000' }
 ];
 /**
- * END CONFIG SECTION
+ * END CONFIGURATION SECTION
  */
-
-let contractAddress;
-
-async function deploy() {
-    let metadata = JSON.parse(await remix.call('fileManager', 'getFile', 'contracts/artifacts/TaleToken.json'));
-    const signer = (new ethers.providers.Web3Provider(web3Provider)).getSigner()
-    let factory = new ethers.ContractFactory(metadata.abi, metadata.data.bytecode.object, signer);
-    let contract = await factory.deploy(instantBeneficiaries[0], instantBeneficiaries[1], 
-                                        instantBeneficiaries[2], instantBeneficiaries[3], 
-                                        instantBeneficiaries[4], instantBeneficiaries[5], 
-                                        instantBeneficiaries[6], instantBeneficiaries[7], 
-                                        instantBeneficiaries[8], instantBeneficiaries[9],);
-    contractAddress = contract.address;
-    console.log("Contract address:" + contract.address);
-    console.log("Transaction hash:" + contract.deployTransaction.hash);
-    await contract.deployed();
-    console.log('Tale Token deployed');
-}
 
 async function addVesting(functionName, benefeciaries) {
     console.log('Start ' + functionName);
@@ -62,13 +38,12 @@ async function addVesting(functionName, benefeciaries) {
     }
 }
 
-deploy()
-  .then(() => addVesting("addPrivateSaleVestingAddress", privateSaleVestingBeneficiaries))
+addVesting("addPrivateSaleVestingAddress", privateSaleVestingBeneficiaries)
   .then(() => addVesting("addTeamAndAdvisorVestingAddress", teamAndAdvisorVestingBeneficiaries))
   .then(() => addVesting("addEcosystemVestingAddress", ecosystemVestingBeneficiaries))
   .then(() => addVesting("addMarketingVestingAddress", marketingVestingBeneficiaries))
   .then(() => addVesting("addExchangeFeeVestingAddress", exhangeFeeVestingBeneficiaries))
-  .then(() => console.log("SUCCESS! All vestings launched. Contract address: " + contractAddress))
+  .then(() => console.log("SUCCESS! All vestings launched."))
   .catch((error) => {
     console.error(error);
   });
