@@ -18,15 +18,15 @@ contract("SimpleStaking", async accounts => {
         assert.ok(poolSize.eq(toWei(50000)), "Invalid pool size");        
     });
 
-    it("should return max APY", async () => {  
-        let apy = await this.simpleStaking.getCurrentApy();
-        assert.equal(apy, 5000000, "Invalid APY");        
+    it("should return max APR", async () => {  
+        let apr = await this.simpleStaking.getCurrentApr();
+        assert.equal(apr, 5000000, "Invalid APR");        
     });
 
-    it("should set max APY", async () => {  
-        await this.simpleStaking.setMaxApy(1500000);
-        let apy = await this.simpleStaking.getCurrentApy();
-        assert.equal(apy, 1500000, "Invalid APY");        
+    it("should set max APR", async () => {  
+        await this.simpleStaking.setMaxApr(1500000);
+        let apr = await this.simpleStaking.getCurrentApr();
+        assert.equal(apr, 1500000, "Invalid APR");        
     });
 
     it("should not stake not allowed tokens", async () => {  
@@ -60,9 +60,9 @@ contract("SimpleStaking", async accounts => {
         assert.ok(userBalance.eq(toWei(948500)), "User balance invalid");
     });
 
-    it ("should return current APY", async () => {
-        let apy = await this.simpleStaking.getCurrentApy();
-        assert.equal(apy, 1500000, "Invalid APY");  //apy should be 33333.3333% but max APY 15.0000%   
+    it ("should return current APR", async () => {
+        let apr = await this.simpleStaking.getCurrentApr();
+        assert.equal(apr, 1500000, "Invalid APR");  //apr should be 33333.3333% but max APR 15.0000%   
     });
 
     it("should add tokens to stake", async () => {
@@ -93,17 +93,17 @@ contract("SimpleStaking", async accounts => {
         assert.ok(userBalance.eq(toWei(918500).add(expectedReward)), "User balance invalid");
     });
 
-    it("should withdrawal and change apy", async () => {   
+    it("should withdrawal and change apr", async () => {   
         let ownerBalanceBefore = await this.taleToken.balanceOf(accounts[0]);
         let poolSizeBefore = await this.simpleStaking.getPoolSize();      
         await this.simpleStaking.withdraw(accounts[0], toWei(30000));
         let ownerBalanceAfter = await this.taleToken.balanceOf(accounts[0]);  
         let poolSizeAfter = await this.simpleStaking.getPoolSize();
-        let currentApy = await this.simpleStaking.getCurrentApy();
+        let currentApr = await this.simpleStaking.getCurrentApr();
 
         assert.ok(ownerBalanceBefore.add(toWei(30000)).eq(ownerBalanceAfter), "Invalid owner balance");
         assert.ok(poolSizeBefore.sub(toWei(30000)).eq(poolSizeAfter), "Invalid pool size");
-        assert.equal(currentApy, 634912, "Invalid APY");
+        assert.equal(currentApr, 634912, "Invalid APR");
     });
 
     it("should claim", async () => {   

@@ -18,7 +18,7 @@ contract SimpleStaking is Ownable {
     }
 
     mapping(address => Staking) public stakers;  
-    uint256 public maxApy = 5000000; //500.0000%
+    uint256 public maxApr = 5000000; //500.0000%
     uint256 public totalStaked;
     IERC20 private taleToken;
 
@@ -101,11 +101,11 @@ contract SimpleStaking is Ownable {
     }
 
     /**
-    * @notice Sets the maximum APY 
+    * @notice Sets the maximum APR 
     *         Available only to the owner of the contract.
     */
-    function setMaxApy(uint256 apy) external onlyOwner {
-        maxApy = apy;
+    function setMaxApr(uint256 apr) external onlyOwner {
+        maxApr = apr;
     }
 
     /**
@@ -118,17 +118,17 @@ contract SimpleStaking is Ownable {
     }
 
     /**
-    * @notice Returns current APY
+    * @notice Returns current APR
     */
-    function getCurrentApy() public view returns(uint256) {
+    function getCurrentApr() public view returns(uint256) {
         if (totalStaked == 0) {
-            return maxApy;
+            return maxApr;
         }
-        uint256 apy = getPoolSize() * 1000000 / totalStaked;
-        if (apy > maxApy) {
-            return maxApy;
+        uint256 apr = getPoolSize() * 1000000 / totalStaked;
+        if (apr > maxApr) {
+            return maxApr;
         } else {
-            return apy;
+            return apr;
         }
     }
 
@@ -155,9 +155,9 @@ contract SimpleStaking is Ownable {
         require(!staking.isUnstaked, "TaleStaking: Staking is unstaked");
         require(block.timestamp >= staking.lastReward, "TaleStaking: Invalid block timestamp");
 
-        uint256 currentApy = getCurrentApy();        
+        uint256 currentApr = getCurrentApr();        
         uint256 period = block.timestamp - staking.lastReward;
         uint256 periods = period / CALCULATION_PERIOD;
-        return staking.amount * currentApy * periods / 1000000 / PERIODS_PER_YEAR;
+        return staking.amount * currentApr * periods / 1000000 / PERIODS_PER_YEAR;
     }
 }
