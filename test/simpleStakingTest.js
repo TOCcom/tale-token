@@ -69,12 +69,8 @@ contract("SimpleStaking", async accounts => {
         await this.taleToken.approve(this.simpleStaking.address, toWei(30000), {from: accounts[1]});
         await time.increase(time.duration.hours(1));
         let stakingResult = await this.simpleStaking.stake(toWei(30000), {from: accounts[1]});
-        let expectedReward = new BN("256849315068493150");
         expectEvent(stakingResult, "Stake", {
             staker: accounts[1], addedAmount: toWei(30000), totalStaked: toWei(31500)
-        });
-        expectEvent(stakingResult, "Reward", {
-            staker: accounts[1], rewards: expectedReward
         });
 
         let timestamp = (await time.latest()).toNumber();
@@ -83,14 +79,14 @@ contract("SimpleStaking", async accounts => {
         assert.equal(staker.lastReward, timestamp, "Last reward not equal to block timestamp");       
         assert.equal(staker.isUnstaked, false, "Staking flag 'isUnstaked' must be false");
         assert.equal(staker.isInitialized, true, "Staking not initialized");
-        assert.equal(availableRewards, 0, "After add tokens to staking should be available 0 rewards");
-        assert.ok(staker.rewarded.eq(expectedReward), "Staking rewarded value is not equal to 0.2565");
+        assert.equal(availableRewards, "256849315068493150", "Invalid available rewards value");
+        assert.equal(staker.rewarded, 0, "Staking rewarded value is not zero");
         assert.ok(staker.amount.eq(toWei(31500)), "Staking amount is not equal to 31500");
 
         let stakingBalance = await this.simpleStaking.totalStaked();
         let userBalance = await this.taleToken.balanceOf(accounts[1]);
         assert.ok(stakingBalance.eq(toWei(31500)), "Imvalid total staked amount");  
-        assert.ok(userBalance.eq(toWei(918500).add(expectedReward)), "User balance invalid");
+        assert.ok(userBalance.eq(toWei(918500)), "User balance invalid");
     });
 
     it("should withdrawal and change apr", async () => {   
@@ -103,7 +99,7 @@ contract("SimpleStaking", async accounts => {
 
         assert.ok(ownerBalanceBefore.add(toWei(30000)).eq(ownerBalanceAfter), "Invalid owner balance");
         assert.ok(poolSizeBefore.sub(toWei(30000)).eq(poolSizeAfter), "Invalid pool size");
-        assert.equal(currentApr, 634912, "Invalid APR");
+        assert.equal(currentApr, 634920, "Invalid APR");
     });
 
     it("should claim", async () => {   
@@ -112,7 +108,7 @@ contract("SimpleStaking", async accounts => {
         let claimResult = await this.simpleStaking.claim({from: accounts[1]});
         let balanceAfter = await this.taleToken.balanceOf(accounts[1]); 
         let balanceDelta =  balanceAfter.sub(balanceBefore);
-        let expectedReward = new BN("2283073972602739726");
+        let expectedReward = new BN("2539952054794520547");
         expectEvent(claimResult, "Reward", {
             staker: accounts[1], rewards: expectedReward
         });

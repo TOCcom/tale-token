@@ -13,6 +13,7 @@ contract SimpleStaking is Ownable {
         uint256 lastReward;
         uint256 amount;
         uint256 rewarded;
+        uint256 pendingReward;
         bool isUnstaked;
         bool isInitialized;
     }
@@ -22,9 +23,9 @@ contract SimpleStaking is Ownable {
     uint256 public totalStaked;
     IERC20 private taleToken;
 
-    event Stake(address indexed staker, uint256 timestamp, uint256 addedAmount, uint totalStaked);
-    event Reward(address indexed staker, uint256 timestamp, uint256 rewards);
-    event UnStake(address indexed staker, uint256 timestamp, uint256 amount);
+    event Stake(address indexed staker, uint256 addedAmount, uint totalStaked);
+    event Reward(address indexed staker, uint256 rewards);
+    event UnStake(address indexed staker, uint256 amount);
     
     constructor(address _taleToken) {
         taleToken = IERC20(_taleToken);
@@ -46,16 +47,17 @@ contract SimpleStaking is Ownable {
         require(taleToken.allowance(staker, address(this)) >= amount, "TaleStaking: Not enough tokens allowed");
 
         if (stakers[staker].isInitialized && !stakers[staker].isUnstaked) {
-            _claim(staker);
-            stakers[staker].amount += amount;
+            stakers[staker].pendingReward += _getStakingReward(stakers[staker]);
+            stakers[staker].amount += amount;            
+            stakers[staker].lastReward = block.timestamp;
         } else {
-            stakers[staker] = Staking(block.timestamp, amount, 0, false, true);
+            stakers[staker] = Staking(block.timestamp, amount, 0, 0, false, true);
         }  
         
         totalStaked += amount;
         taleToken.transferFrom(staker, address(this), amount);  
 
-        emit Stake(staker, block.timestamp, amount, stakers[staker].amount);
+        emit Stake(staker, amount, stakers[staker].amount);
     }
 
     /**
@@ -77,7 +79,7 @@ contract SimpleStaking is Ownable {
         totalStaked -= amount;
         taleToken.transfer(staker, amount);
 
-        emit UnStake(staker, block.timestamp, amount);
+        emit UnStake(staker, amount);
     }
 
     /**
@@ -145,9 +147,10 @@ contract SimpleStaking is Ownable {
         uint256 reward = _getStakingReward(staking);
         staking.lastReward = block.timestamp;
         staking.rewarded += reward;
+        staking.pendingReward = 0;
         taleToken.transfer(staker, reward);
 
-        emit Reward(staker, block.timestamp, reward);
+        emit Reward(staker, reward);
     }
 
     function _getStakingReward(Staking storage staking) private view returns(uint256) {
@@ -158,6 +161,7 @@ contract SimpleStaking is Ownable {
         uint256 currentApr = getCurrentApr();        
         uint256 period = block.timestamp - staking.lastReward;
         uint256 periods = period / CALCULATION_PERIOD;
-        return staking.amount * currentApr * periods / 1000000 / PERIODS_PER_YEAR;
+        uint256 reward = staking.amount * currentApr * periods / 1000000 / PERIODS_PER_YEAR;
+        return staking.pendingReward + reward;
     }
 }
