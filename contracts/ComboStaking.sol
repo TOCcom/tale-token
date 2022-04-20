@@ -76,8 +76,8 @@ contract ComboStaking is Ownable {
         require(taleToken.balanceOf(staker) >= amount, "TaleStaking: Insufficient tokens");
         require(taleToken.allowance(staker, address(this)) >= amount, "TaleStaking: Not enough tokens allowed");
 
-        uint stakingId = stakers[staker].stakingNumber + 1;    
-        stakers[staker].stakingNumber = stakingId;
+        uint stakingId = stakers[staker].stakingNumber;    
+        stakers[staker].stakingNumber = stakingId + 1;
         stakers[staker].stakings[stakingId] = Staking(block.timestamp, amount, 0, targetLevel, StakingLevel.SIMPLE, false, true);
         stakers[staker].activeStakings[stakingId] = true;
 
@@ -203,7 +203,7 @@ contract ComboStaking is Ownable {
         uint256 activeStakingsCount = getActiveStakingCount(user);
         uint256[] memory result = new uint256[](activeStakingsCount);
         uint256 j = 0;
-        for (uint256 i = 1; i <= stakers[user].stakingNumber; ++i) {
+        for (uint256 i = 0; i < stakers[user].stakingNumber; ++i) {
             if (stakers[user].activeStakings[i]) {
                 result[j] = i;
                 ++j;
@@ -240,7 +240,7 @@ contract ComboStaking is Ownable {
     */
     function getActiveStakingCount(address user) public view returns(uint256) {
         uint256 count = 0;
-        for (uint256 i = 1; i <= stakers[user].stakingNumber; ++i) {
+        for (uint256 i = 0; i < stakers[user].stakingNumber; ++i) {
             if (stakers[user].activeStakings[i]) {
                 ++count;
             }
