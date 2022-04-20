@@ -2,8 +2,9 @@
 pragma solidity ^0.8.1;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
-contract TalesOfChainHero is ERC721, Ownable
+contract TalesOfChainHero is ERC721Enumerable, Ownable
 {
     using Strings for uint256;
 
@@ -11,20 +12,12 @@ contract TalesOfChainHero is ERC721, Ownable
     string private _baseTokenURI;
     address private _minterFactory;
     address private _rentalContract;
-    uint256 private _totalSupply;
 
     constructor(string memory baseTokenURI_, address minterFactory_, address rentalContract_) 
         ERC721("Tales Of Chain Hero", "TLH") {
             _baseTokenURI = baseTokenURI_;
             _minterFactory = minterFactory_;
             _rentalContract = rentalContract_;
-    }
-
-    /**
-     * @dev Returns the number of issued tokens.
-     */
-    function totalSupply() public view virtual returns (uint256) {
-        return _totalSupply;
     }
 
     /**
@@ -85,9 +78,8 @@ contract TalesOfChainHero is ERC721, Ownable
      */
     function mint(address to) external returns(uint256) {
         require(minterFactory() == _msgSender(), "Only minter factory can mint");
-        uint256 tokenId = _totalSupply + 1;
+        uint256 tokenId = totalSupply();
         require(!_exists(tokenId), "Must have unique tokenId");
-        _totalSupply += 1;
         _mint(to, tokenId);    
         return tokenId;
     }

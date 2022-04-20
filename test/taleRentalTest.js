@@ -102,7 +102,7 @@ contract("TaleRental", async accounts => {
 
         let messageHash = soliditySha3(
             taleHero.address,
-            1, 
+            0, 
             heroPrice, 
             taleToken.address, 
             86400, 
@@ -110,13 +110,13 @@ contract("TaleRental", async accounts => {
         let signature = await web3.eth.sign(messageHash, accounts[0]);
         let result = await this.taleRental.rentHero(
             [accounts[0], taleToken.address, taleHero.address],
-            [1, heroPrice, 86400, 654243505],
+            [0, heroPrice, 86400, 654243505],
             signature, {from: accounts[1]});
 
         expectEvent(result, "RentHero", {
                 renter: accounts[1],
                 tokenContract: taleHero.address,
-                tokenId: new BN(1),
+                tokenId: new BN(0),
                 paymentToken: taleToken.address,
                 price: new BN(heroPrice),
                 fee: new BN(250)
@@ -125,9 +125,9 @@ contract("TaleRental", async accounts => {
         let renterBalance = await taleToken.balanceOf(accounts[1]);        
         let feeBalance = await taleToken.balanceOf(accounts[2]);
         let herOwnerBalance = await taleToken.balanceOf(accounts[0]);
-        let heroOwner = await taleHero.ownerOf(1);     
-        let isHeroLocked = await taleHero.isLocked(1);
-        let lockedUpTo = await taleHero.lockedTokens(1);
+        let heroOwner = await taleHero.ownerOf(0);     
+        let isHeroLocked = await taleHero.isLocked(0);
+        let lockedUpTo = await taleHero.lockedTokens(0);
         let blockTimestamp = (await web3.eth.getBlock(result.receipt.blockNumber)).timestamp;
         assert.equal(renterBalance, 1000000 - heroPrice, "Invalid renter ERC20 balance after rent");
         assert.equal(feeBalance, heroPrice * fee, "Invalid fee ERC20 address balance after rent");
