@@ -13,7 +13,8 @@
   },
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.15",
-    "truffle": "^5.5.4"
+    "truffle": "^5.5.4",
+    "truffle-plugin-verify": "^0.5.25"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
