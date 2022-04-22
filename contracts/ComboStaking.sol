@@ -2,12 +2,14 @@
 pragma solidity ^0.8.1;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 interface IMinterFactory {
     function mintTo(address to, address tokenAddress) external;
 }
 
 contract ComboStaking is Ownable {
+    using SafeERC20 for IERC20;
 
     uint256 public constant MIN_STAKING_VALUE = 25000 * 10 ** 18;    
     
@@ -82,7 +84,7 @@ contract ComboStaking is Ownable {
         stakers[staker].activeStakings[stakingId] = true;
 
         totalStaked += amount;
-        taleToken.transferFrom(staker, address(this), amount);  
+        taleToken.safeTransferFrom(staker, address(this), amount);  
 
         emit Stake(staker, amount, targetLevel);
     }
@@ -110,7 +112,7 @@ contract ComboStaking is Ownable {
             
             totalStaked -= staking.amount;
             uint256 totalAmount = staking.amount + staking.rewarded;
-            taleToken.transfer(staker, totalAmount);
+            taleToken.safeTransfer(staker, totalAmount);
 
             emit TaleReward(staker, staking.amount, staking.rewarded);
         }
@@ -183,7 +185,7 @@ contract ComboStaking is Ownable {
     */
     function withdraw(address to, uint256 amount) external onlyOwner {
         require(getPoolSize() >= amount, "TaleStaking: Owner can't withdraw more than pool size");
-        taleToken.transfer(to, amount);
+        taleToken.safeTransfer(to, amount);
     }
 
     /**

@@ -4,12 +4,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 interface ITaleHero is IERC721 {
     function isLocked(uint256 tokenId) external view returns (bool);
 }
 
 contract HeroStaking is Ownable, ERC721Holder {
+    using SafeERC20 for IERC20;
     
     uint256 public constant CALCULATION_PERIOD = 300;
 
@@ -114,7 +116,7 @@ contract HeroStaking is Ownable, ERC721Holder {
         uint256 reward = _getStakingReward(staking);
         staking.rewarded += reward;
         staking.lastReward = block.timestamp;
-        taleToken.transfer(staker, reward);
+        taleToken.safeTransfer(staker, reward);
 
         emit Reward(staker, reward);   
     }
@@ -143,7 +145,7 @@ contract HeroStaking is Ownable, ERC721Holder {
     */
     function withdraw(address to, uint256 amount) external onlyOwner {
         require(getPoolSize() >= amount, "TaleStaking: Owner can't withdraw more than pool size");
-        taleToken.transfer(to, amount);
+        taleToken.safeTransfer(to, amount);
     }
     
     /**
