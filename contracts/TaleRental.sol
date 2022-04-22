@@ -24,8 +24,8 @@ contract TaleRental is Ownable {
                  uint256 toTimestamp);
   event CancelSignature(address indexed tokenContract, uint256 indexed tokenId, bytes signature);
 
-  address public feeToAddress; //percent with two decimals
-  uint256 public rentalFee;
+  address public feeToAddress; 
+  uint256 public rentalFee; //percent with two decimals
 
   mapping(bytes => bool) public usedSignatures;
 
