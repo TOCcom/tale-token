@@ -120,7 +120,7 @@ contract ComboStaking is Ownable {
 
     function claimNft(Staking storage staking, address staker) private {
         uint256 stakingDuration = block.timestamp - staking.timestamp;
-        for (uint256 i = uint256(staking.rewardedLevel)  + 1; i < 5; ++i) {
+        for (uint256 i = uint256(staking.rewardedLevel)  + 1; i <= uint256(staking.targetLevel); ++i) {
             StakingLevel level = StakingLevel(i);
             RewardRule memory rule = rewardRules[level];
             if (stakingDuration >= rule.period) {

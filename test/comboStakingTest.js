@@ -110,27 +110,46 @@ contract("ComboStaking", async accounts => {
         assert.equal(staking.isInitialized, true, "Invalid 'isInitialized' value"); 
     });
 
+    it("should stake for simple", async () => {   
+        await this.taleToken.approve(this.comboStaking.address, toWei(25000), {from: accounts[1]});
+        let result = await this.comboStaking.stake(toWei(25000), 0, {from: accounts[1]});
+        expectEvent(result, "Stake", {
+            staker: accounts[1], amount: toWei(25000), targetLevel: "0"
+        });
+
+        let timestamp = (await time.latest()).toNumber();
+        let staking = await this.comboStaking.getStaking(accounts[1], 2);
+        assert.ok(toWei(25000).eq(new BN(staking.amount)), "Invalid staking amount"); 
+        assert.equal(staking.timestamp, timestamp, "Invalid timestamp");   
+        assert.equal(staking.rewarded, 0, "Invalid rewarded amount");  
+        assert.equal(staking.targetLevel, 0, "Invalid target level");  
+        assert.equal(staking.rewardedLevel, 0, "Invalid rewarded level");  
+        assert.equal(staking.isCompleted, false, "Invalid 'isCompleted' value"); 
+        assert.equal(staking.isInitialized, true, "Invalid 'isInitialized' value"); 
+    });
+
     it("should return total staked amount", async () => {
         let totalStaked = await this.comboStaking.totalStaked();
-        assert.ok(totalStaked.eq(toWei(50000)), "Invalid total staked amount");  
+        assert.ok(totalStaked.eq(toWei(75000)), "Invalid total staked amount");  
     });
 
     it("should return all staking count", async () => {
         let stakingCount = await this.comboStaking.getAllStakingCount(accounts[1]);
-        assert.equal(stakingCount, 2, "Invalid staking count");   
+        assert.equal(stakingCount, 3, "Invalid staking count");   
     });
 
     it("should return active staking count", async () => {
         let stakingCount = await this.comboStaking.getActiveStakingCount(accounts[1]);
-        assert.equal(stakingCount, 2, "Invalid active staking count");   
+        assert.equal(stakingCount, 3, "Invalid active staking count");   
     });
 
     it("should return active staking indexes", async () => {
         let stakingIndexes = await this.comboStaking.getActiveStakingIndexes(accounts[1]);
 
-        assert.equal(stakingIndexes.length, 2, "Invalid active staking count");  
+        assert.equal(stakingIndexes.length, 3, "Invalid active staking count");  
         assert.equal(stakingIndexes[0], 0, "Invalid staking index");   
         assert.equal(stakingIndexes[1], 1, "Invalid staking index");  
+        assert.equal(stakingIndexes[2], 2, "Invalid staking index");  
     });
 
     it("should not cliam ahead of time", async () => {
@@ -147,6 +166,30 @@ contract("ComboStaking", async accounts => {
         });
         let stakerNftBalance = await this.uncommonHero.balanceOf(accounts[1]);
         assert.equal(stakerNftBalance, 1, "Invalid staker NFT balance");
+    });
+
+    it("should cliam only tale and complete staking", async () => {
+        let stakerBalanceBefore = await this.taleToken.balanceOf(accounts[1]);
+        let expectedRewards = new BN("308219178082191780821");
+        let result = await this.comboStaking.claim(2, {from: accounts[1]});
+        assert.equal(result.receipt.logs.length, 1, "Invalid logs count");
+        expectEvent(result, "TaleReward", {
+            staker: accounts[1], amount: toWei(25000), reward: expectedRewards
+        });
+        let stakerNftBalance = await this.uncommonHero.balanceOf(accounts[1]);
+        assert.equal(stakerNftBalance, 1, "Invalid staker NFT balance");
+
+        let staking = await this.comboStaking.getStaking(accounts[1], 2);
+        assert.ok(toWei(25000).eq(new BN(staking.amount)), "Invalid staking amount"); 
+        assert.equal(staking.rewarded, expectedRewards, "Invalid rewarded amount");  
+        assert.equal(staking.targetLevel, 0, "Invalid target level");  
+        assert.equal(staking.rewardedLevel, 0, "Invalid rewarded level");  
+        assert.equal(staking.isCompleted, true, "Invalid 'isCompleted' value"); 
+        assert.equal(staking.isInitialized, true, "Invalid 'isInitialized' value"); 
+
+        let stakerBalanceAfter = await this.taleToken.balanceOf(accounts[1]); 
+        assert.ok(stakerBalanceAfter.sub(stakerBalanceBefore)
+                  .eq(expectedRewards.add(toWei(25000))), 'Invalid staker balance after');
     });
 
     it("should compele staking", async () => {
@@ -173,7 +216,7 @@ contract("ComboStaking", async accounts => {
 
     it("should return all staking count", async () => {
         let stakingCount = await this.comboStaking.getAllStakingCount(accounts[1]);
-        assert.equal(stakingCount, 2, "Invalid staking count");   
+        assert.equal(stakingCount, 3, "Invalid staking count");   
     });
 
     it("should return active staking count", async () => {
