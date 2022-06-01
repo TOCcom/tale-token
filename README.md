@@ -15,7 +15,7 @@ https://bscscan.com/token/0x9755ac467BEE2E7558B89988Df3dE4cA4f16b123
 # Staking
 * Flexible Staking
 https://bscscan.com/address/0xA033cb843E56D4eadefd5E11f5d68299455ee412
-* Challenge Staking https://bscscan.com/address/0x71e2a5deB7cc2D1DBBBd8E3f16bCB54175D1a0CE
+* Challenge Staking https://bscscan.com/address/0x705AAF6c3472eaeA1bCa3f7A472A7a9a7e3147EF
 * NFT Staking
   - Uncommon https://bscscan.com/address/0xd47Bd6487dcDae8d8877d61376C7187b223D1888
   - Rare https://bscscan.com/address/0xdFC8eEF605E060C18F9903484a0589aA365a9962

@@ -57,10 +57,10 @@ contract ComboStaking is Ownable {
     constructor(address _taleToken, address _minterFactory) {
         taleToken = IERC20(_taleToken);
         minterFactory = IMinterFactory(_minterFactory);
-        rewardRules[StakingLevel.SIMPLE] = RewardRule(30, 15 days, address(0));
-        rewardRules[StakingLevel.UNCOMMON] = RewardRule(50, 30 days, address(0));
-        rewardRules[StakingLevel.RARE] = RewardRule(70, 50 days, address(0));
-        rewardRules[StakingLevel.EPIC] = RewardRule(90, 75 days, address(0));
+        rewardRules[StakingLevel.SIMPLE] = RewardRule(15, 15 days, address(0));
+        rewardRules[StakingLevel.UNCOMMON] = RewardRule(30, 30 days, address(0));
+        rewardRules[StakingLevel.RARE] = RewardRule(50, 50 days, address(0));
+        rewardRules[StakingLevel.EPIC] = RewardRule(75, 75 days, address(0));
         rewardRules[StakingLevel.LEGENDARY] = RewardRule(100, 100 days, address(0));
     }
 
