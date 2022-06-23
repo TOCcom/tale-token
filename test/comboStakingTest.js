@@ -46,10 +46,10 @@ contract("ComboStaking", async accounts => {
         let epicApr = (await this.comboStaking.rewardRules(3)).apr;
         let legendaryApr = (await this.comboStaking.rewardRules(4)).apr;
 
-        assert.equal(simpleApr, 30, "Invalid simple apr");  
-        assert.equal(uncommonApr, 50, "Invalid uncommon apr");       
-        assert.equal(rareApr, 70, "Invalid rare apr");  
-        assert.equal(epicApr, 90, "Invalid epic apr");  
+        assert.equal(simpleApr, 15, "Invalid simple apr");  
+        assert.equal(uncommonApr, 30, "Invalid uncommon apr");       
+        assert.equal(rareApr, 50, "Invalid rare apr");  
+        assert.equal(epicApr, 75, "Invalid epic apr");  
         assert.equal(legendaryApr, 100, "Invalid legendary apr");     
     });
 
@@ -170,7 +170,7 @@ contract("ComboStaking", async accounts => {
 
     it("should cliam only tale and complete staking", async () => {
         let stakerBalanceBefore = await this.taleToken.balanceOf(accounts[1]);
-        let expectedRewards = new BN("308219178082191780821");
+        let expectedRewards = new BN("154109589041095890410");
         let result = await this.comboStaking.claim(2, {from: accounts[1]});
         assert.equal(result.receipt.logs.length, 1, "Invalid logs count");
         expectEvent(result, "TaleReward", {
@@ -200,14 +200,14 @@ contract("ComboStaking", async accounts => {
             staker: accounts[1], taleHero: this.rareHero.address
         });
         expectEvent(result, "TaleReward", {
-            staker: accounts[1], amount: toWei(25000), reward: "2397260273972602739726"
+            staker: accounts[1], amount: toWei(25000), reward: "1712328767123287671232"
         });
         let stakerRareBalance = await this.rareHero.balanceOf(accounts[1]);
         assert.equal(stakerRareBalance, 1, "Invalid staker Rare Hero balance");
 
         let staking = await this.comboStaking.getStaking(accounts[1], 1);
         assert.ok(toWei(25000).eq(new BN(staking.amount)), "Invalid staking amount"); 
-        assert.equal(staking.rewarded, "2397260273972602739726", "Invalid rewarded amount");  
+        assert.equal(staking.rewarded, "1712328767123287671232", "Invalid rewarded amount");  
         assert.equal(staking.targetLevel, 2, "Invalid target level");  
         assert.equal(staking.rewardedLevel, 2, "Invalid rewarded level");  
         assert.equal(staking.isCompleted, true, "Invalid 'isCompleted' value"); 
