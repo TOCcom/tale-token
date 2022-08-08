@@ -7,14 +7,17 @@
     "test": "test"
   },
   "dependencies": {
-    "web3-utils": "^1.7.1",
     "@openzeppelin/contracts": "^4.5.0",
-    "@openzeppelin/test-helpers": "^0.5.15"
+    "@openzeppelin/test-helpers": "^0.5.15",
+    "web3-utils": "^1.7.1"
   },
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.15",
+    "@truffle/hdwallet-provider": "^2.0.10",
     "truffle": "^5.5.4",
-    "truffle-plugin-verify": "^0.5.25"
+    "truffle-plugin-stdjsonin": "github:mhrsalehi/truffle-plugin-stdjsonin",
+    "truffle-plugin-verify": "^0.5.26",
+    "truffle-privatekey-provider": "^1.5.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

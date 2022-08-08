@@ -73,23 +73,25 @@ contract CardPack is Ownable {
         address[] calldata heroContracts,
         uint256[] calldata heroQuantities,
         bytes calldata signature
-        ) external {
-            require(!usedSignatures[signature], "CardPack: Pack already opened");
-            require(heroContracts.length == heroQuantities.length, 
-                "CardPack: Each contract must match the quantity");
+    ) 
+        external 
+    {
+        require(!usedSignatures[signature], "CardPack: Pack already opened");
+        require(heroContracts.length == heroQuantities.length, 
+            "CardPack: Each contract must match the quantity");
 
-            bytes32 criteriaMessageHash = getOpenMessageHash(dealId, heroContracts, heroQuantities);
-            bytes32 messageHash = ECDSA.toEthSignedMessageHash(criteriaMessageHash);
-            require(ECDSA.recover(messageHash, signature) == gameServer, 
-                "CardPack: Invalid signature");
+        bytes32 criteriaMessageHash = getOpenMessageHash(dealId, heroContracts, heroQuantities);
+        bytes32 messageHash = ECDSA.toEthSignedMessageHash(criteriaMessageHash);
+        require(ECDSA.recover(messageHash, signature) == gameServer, 
+            "CardPack: Invalid signature");
 
-            for (uint256 i = 0; i < heroContracts.length; ++i) {
-                for (uint256 j = 0; j < heroQuantities[i]; ++j) {
-                    minterFactory.mintTo(_msgSender(), heroContracts[i]);
-                }
+        for (uint256 i = 0; i < heroContracts.length; ++i) {
+            for (uint256 j = 0; j < heroQuantities[i]; ++j) {
+                minterFactory.mintTo(_msgSender(), heroContracts[i]);
             }
+        }
 
-            emit PackOpened(_msgSender(), dealId, signature);
+        emit PackOpened(_msgSender(), dealId, signature);
     }
 
     function setGameServer(address gameServerAddress) external onlyOwner {
