@@ -7,7 +7,7 @@
     "test": "test"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.5.0",
+    "@openzeppelin/contracts": "^4.7.3",
     "@openzeppelin/test-helpers": "^0.5.15",
     "web3-utils": "^1.7.1"
   },

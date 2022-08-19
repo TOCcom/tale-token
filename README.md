@@ -30,10 +30,17 @@ Cards for Challenge Staking:
 * Epic card https://bscscan.com/address/0x754E487D7235CadE40430d84F5f02054Fd6E78e8
 * Legendary card https://bscscan.com/address/0x18642cb173203956390dEadB8E261e4ceFbF41A9
 
+Cards:
+* Talouriel Gilven https://bscscan.com/address/0xF9979d6bb0542e746E0bD023B80757479a4c13FD
+
 # Minter factory
 https://bscscan.com/address/0x22172f3f000e17ee7abf488b0cdb1ab18604557d
 # Tale rental
-https://bscscan.com/address/0x9a4052773E4ABc563b727cb007c06E5Ccef1d92d
+https://bscscan.com/address/0x7c7A01308f94aaD6cB681A8E65a061d91C8E29be
+# Marketplace
+https://bscscan.com/address/0x110E3a1563493384e02bF1fEc2F7Ff2Be2Fb40Db
+# Card packs
+https://bscscan.com/address/0xCc35B201F1348310160962202EdfeA472486e239
 # Tests
 To run the tests, install the dependencies:
 ```console
