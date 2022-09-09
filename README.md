@@ -16,12 +16,12 @@ https://bscscan.com/token/0x9755ac467BEE2E7558B89988Df3dE4cA4f16b123
 * Flexible Staking
 https://bscscan.com/address/0xA033cb843E56D4eadefd5E11f5d68299455ee412
 * Challenge Staking https://bscscan.com/address/0x705AAF6c3472eaeA1bCa3f7A472A7a9a7e3147EF
+* Challenge Staking V2 https://bscscan.com/address/0x89F22316A088259C454b9840d368b603F66F8D20
+* NFT Staking
   - Uncommon https://bscscan.com/address/0xd47Bd6487dcDae8d8877d61376C7187b223D1888
   - Rare https://bscscan.com/address/0xdFC8eEF605E060C18F9903484a0589aA365a9962
   - Epic https://bscscan.com/address/0xbB42A7CBde75b758642Cd0659DD6369319B0FaC4
   - Legendary https://bscscan.com/address/0x119e667868e253cA75dCfcE4d1a99B56dBc9C17D
-
-* NFT Staking
 # Cards for Challenge Staking
 The Hero of Tales Of Chain is BEP-721 tokens. Each hero is represented by their own smart contract.
 
