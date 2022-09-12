@@ -14,7 +14,7 @@ Smart contracts for Tales Of Chain:
 https://bscscan.com/token/0x9755ac467BEE2E7558B89988Df3dE4cA4f16b123
 # Staking
 * Flexible Staking
-https://bscscan.com/address/0xA033cb843E56D4eadefd5E11f5d68299455ee412
+https://bscscan.com/address/0x4d9938BC15580bC609C9390B5b81bd2fd92E4a9A
 * Challenge Staking https://bscscan.com/address/0x705AAF6c3472eaeA1bCa3f7A472A7a9a7e3147EF
 * Challenge Staking V2 https://bscscan.com/address/0x89F22316A088259C454b9840d368b603F66F8D20
 * NFT Staking
